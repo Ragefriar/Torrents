@@ -49,12 +49,12 @@ ForEach ($mkv in $mkvfiles){
             Write-Host "Contains DTS - keeping DTS stream, adding AC3 stream " -foregroundcolor green -nonewline
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
-                Write-Host "and has incompatible Subtitle - omitting" -foregroundcolor green
+                Write-Host "and has incompatible subtitle" -foregroundcolor green
                 &ffmpeg -i $mkv.FullName -map 0:0 -map 0:1 -map 0:1 -c:v copy -c:a:0 ac3 -b:a 640k -c:a:1 copy $converted/$mp4name.mp4 2> $ffmpeg_logs/$($mkv.Name).log
             }
             # Include good subtitles
             Else {
-                Write-Host "and has good Subtitle" -foregroundcolor green
+                Write-Host "and has good subtitle" -foregroundcolor green
                 &ffmpeg -i $mkv.FullName -map 0:0 -map 0:1 -map 0:1 -c:v copy -c:a:0 ac3 -b:a 640k -c:a:1 copy -c:s mov_text $converted/$mp4name.mp4 2> $ffmpeg_logs/$($mkv.Name).log
             }
             # If no errors, write to log & delete MKV
@@ -77,12 +77,12 @@ ForEach ($mkv in $mkvfiles){
             Write-Host "Contains TrueHD or Dolby Digital Plus - coverting to AC3 " -foregroundcolor green -nonewline
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
-                Write-Host "and has incompatible Subtitle - omitting" -foregroundcolor green
+                Write-Host "and has incompatible subtitle" -foregroundcolor green
                 &ffmpeg -i $mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a ac3 -b:a 640k $converted/$mp4name.mp4 2> $ffmpeg_logs/$($mkv.Name).log
             }
             # Include good subtitles
             Else {
-                Write-Host "ans has good Subtitle" -foregroundcolor green
+                Write-Host "ans has good subtitle" -foregroundcolor green
                 &ffmpeg -i $mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a ac3 -b:a 640k -c:s mov_text $converted/$mp4name.mp4 2> $ffmpeg_logs/$($mkv.Name).log
             }
             # If no errors, write to log & delete MKV
@@ -104,12 +104,12 @@ ForEach ($mkv in $mkvfiles){
         Else {
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
-                Write-Host "Apple compatible streams and incompatible Subtitle - omitting" -foregroundcolor green
+                Write-Host "Apple compatible streams and incompatible subtitle" -foregroundcolor green
                 &ffmpeg -i $mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a copy $converted/$mp4name.mp4 2> $ffmpeg_logs/$($mkv.Name).log
             }
             # Include good subtitles
             Else {
-                Write-Host "Apple compatibe stream and has good Subtitle" -foregroundcolor green
+                Write-Host "Apple compatibe stream and has good subtitle" -foregroundcolor green
                 &ffmpeg -i $mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a copy -c:s mov_text $converted/$mp4name.mp4 2> $ffmpeg_logs/$($mkv.Name).log
             }
             # If no errors, write to log & delete MKV
@@ -146,12 +146,12 @@ ForEach ($whole_mkv in $non_rar_mkv){
             Write-Host "Contains DTS - keeping DTS stream, adding AC3 stream " -foregroundcolor green -nonewline
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
-                Write-Host "and has incompatible Subtitle - omitting" -foregroundcolor green
+                Write-Host "and has incompatible subtitle" -foregroundcolor green
                 &ffmpeg -i $whole_mkv.FullName -map 0:0 -map 0:1 -map 0:1 -c:v copy -c:a:0 ac3 -b:a 640k -c:a:1 copy $converted/$mp4name.mp4 2> $ffmpeg_logs/$($whole_mkv.Name).log
             }
             # Include good subtitles
             Else {
-                Write-Host "and has good Subtitle" -foregroundcolor green
+                Write-Host "and has good subtitle" -foregroundcolor green
                 &ffmpeg -i $whole_mkv.FullName -map 0:0 -map 0:1 -map 0:1 -c:v copy -c:a:0 ac3 -b:a 640k -c:a:1 copy -c:s mov_text $converted/$mp4name.mp4 2> $ffmpeg_logs/$($whole_mkv.Name).log
             }
             # If no errors, write to log & delete MKV
@@ -173,12 +173,12 @@ ForEach ($whole_mkv in $non_rar_mkv){
             Write-Host "Contains TrueHD or Dolby Digital Plus - coverting to AC3 " -foregroundcolor green -nonewline
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
-                Write-Host "and has incompatible Subtitle - omitting" -foregroundcolor green
+                Write-Host "and has incompatible subtitle" -foregroundcolor green
                 &ffmpeg -i $whole_mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a ac3 -b:a 640k $converted/$mp4name.mp4 2> $ffmpeg_logs/$($whole_mkv.Name).log
             }
             # Include good subtitles
             Else {
-                Write-Host "and has good Subtitle" -foregroundcolor green
+                Write-Host "and has good subtitle" -foregroundcolor green
                 &ffmpeg -i $whole_mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a ac3 -b:a 640k -c:s mov_text $converted/$mp4name.mp4 2> $ffmpeg_logs/$($whole_mkv.Name).log
             }
             # If no errors, write to log & delete MKV
@@ -199,12 +199,12 @@ ForEach ($whole_mkv in $non_rar_mkv){
         Else {
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
-                Write-Host "Apple compatible stream and has incompatible Subtitle - omitting" -foregroundcolor green
+                Write-Host "Apple compatible stream and has incompatible subtitle" -foregroundcolor green
                 &ffmpeg -i $whole_mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a copy $converted/$mp4name.mp4 2> $ffmpeg_logs/$($whole_mkv.Name).log
             }
             # Include good subtitles
             Else {
-                Write-Host "Apple compatible stream and has good Subtitle" -foregroundcolor green
+                Write-Host "Apple compatible stream and has good subtitle" -foregroundcolor green
                 &ffmpeg -i $whole_mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a copy -c:s mov_text $converted/$mp4name.mp4 2> $ffmpeg_logs/$($whole_mkv.Name).log
             }
             # If no errors, write to log & delete MKV
