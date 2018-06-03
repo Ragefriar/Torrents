@@ -21,11 +21,14 @@ $rarfiles = Get-ChildItem -path $completed -recurse -include "*.rar"
 ForEach ($rar in $rarfiles){
     $done = Get-Content $extracted_history
     $search = $done | ForEach-Object {$_ -match $rar.Name}
-    If (!($search -match $true)){
-        Write-Host "Extracting $($rar.Name)" -foregroundcolor green
-        &unrar e -o- $rar.FullName $extracted  > /dev/null 2>&1
-        Add-Content -path $extracted_history -value $rar.Name
-        Get-ChildItem -path $extracted -recurse | Rename-Item -newname {$_.Name -replace ' ','.'}  
+    # Make sure file is Movie or TV episode
+    If ($rar.Name -match "1080p" -or $rar.Name -match "720p"){
+        If (!($search -match $true)){
+            Write-Host "Extracting $($rar.Name)" -foregroundcolor green
+            &unrar e -o- $rar.FullName $extracted  > /dev/null 2>&1
+            Add-Content -path $extracted_history -value $rar.Name
+            Get-ChildItem -path $extracted -recurse | Rename-Item -newname {$_.Name -replace ' ','.'}  
+        }
     }    
 }
 
