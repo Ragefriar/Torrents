@@ -46,7 +46,7 @@ ForEach ($mkv in $mkvfiles){
         $subtitle_codec = &mediainfo "--Inform=Text;%Format%\n" "$($mkv)"
         # If file contains DTS, convert it
         If ($audio_codecs -match "DTS"){
-            Write-Host "Contains DTS - keeping DTS stream, adding AC3 stream " -foregroundcolor green -nonewline
+            Write-Host "AppleTV imcompatible streams. Contains DTS - keeping DTS stream, adding AC3 stream " -foregroundcolor green -nonewline
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
                 Write-Host "and has incompatible subtitle" -foregroundcolor green
@@ -59,7 +59,7 @@ ForEach ($mkv in $mkvfiles){
             }
             # If no errors, write to log & delete MKV
             If ($lastexitcode -eq 0){
-                Write-Host "No errors detected" -foregroundcolor green
+                Write-Host "No errors detected during FFmpeg conversion" -foregroundcolor green
                 Add-Content -path $converted_history -value $mkv.Name
                 Get-ChildItem -path $converted -recurse | Rename-Item -newname {$_.Name -replace ' ','.'}
                 Remove-Item -path $mkv.FullName
@@ -67,14 +67,14 @@ ForEach ($mkv in $mkvfiles){
             }
             # If errors, log filename for investigaion
             Else {
-                Write-Host "Errors detected - check $($ffmpeg_logs)/$($mkv.Name).log" -foregroundcolor red
+                Write-Host "Errors detected during FFmpeg conversion - check $($ffmpeg_logs)/$($mkv.Name).log" -foregroundcolor red
                 Add-Content -path $ffmpeg_errors -value $mkv.Name
                 Write-Host ""
             }    
         }
         # If file contains TrueHD or Dolby Digital Plus, convert it
         ElseIf ($audio_codecs -match "TrueHD" -or $audio_codecs -match "EAC3"){
-            Write-Host "Contains TrueHD or Dolby Digital Plus - coverting to AC3 " -foregroundcolor green -nonewline
+            Write-Host "AppleTV imcompatible streams. Contains TrueHD or Dolby Digital Plus - coverting to AC3 " -foregroundcolor green -nonewline
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
                 Write-Host "and has incompatible subtitle" -foregroundcolor green
@@ -87,7 +87,7 @@ ForEach ($mkv in $mkvfiles){
             }
             # If no errors, write to log & delete MKV
             If ($lastexitcode -eq 0){
-                Write-Host "No errors detected" -foregroundcolor green
+                Write-Host "No errors detected during FFmpeg conversion" -foregroundcolor green
                 Add-Content -path $converted_history -value $mkv.Name
                 Get-ChildItem -path $converted -recurse | Rename-Item -newname {$_.Name -replace ' ','.'}
                 Remove-Item -path $mkv.FullName
@@ -95,7 +95,7 @@ ForEach ($mkv in $mkvfiles){
             }
             # If errors, log filename for investigaion
             Else {
-                Write-Host "Errors detected - check $($ffmpeg_logs)/$($mkv.Name).log" -foregroundcolor red
+                Write-Host "Errors detected during FFmpeg conversion - check $($ffmpeg_logs)/$($mkv.Name).log" -foregroundcolor red
                 Add-Content -path $ffmpeg_errors -value $mkv.Name
                 Write-Host ""
             }
@@ -104,17 +104,17 @@ ForEach ($mkv in $mkvfiles){
         Else {
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
-                Write-Host "Apple compatible streams and incompatible subtitle" -foregroundcolor green
+                Write-Host "AppleTV compatible streams and incompatible subtitle" -foregroundcolor green
                 &ffmpeg -i $mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a copy $converted/$mp4name.mp4 2> $ffmpeg_logs/$($mkv.Name).log
             }
             # Include good subtitles
             Else {
-                Write-Host "Apple compatibe stream and has good subtitle" -foregroundcolor green
+                Write-Host "AppleTV compatibe stream and has good subtitle" -foregroundcolor green
                 &ffmpeg -i $mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a copy -c:s mov_text $converted/$mp4name.mp4 2> $ffmpeg_logs/$($mkv.Name).log
             }
             # If no errors, write to log & delete MKV
             If ($lastexitcode -eq 0){
-                Write-Host "No errors detected" -foregroundcolor green
+                Write-Host "No errors detected during FFmpeg conversion" -foregroundcolor green
                 Add-Content -path $converted_history -value $mkv.Name
                 Get-ChildItem -path $converted -recurse | Rename-Item -newname {$_.Name -replace ' ','.'}
                 Remove-Item -path $mkv.FullName
@@ -122,7 +122,7 @@ ForEach ($mkv in $mkvfiles){
             }
             # If errors, log filename for investigaion
             Else {
-                Write-Host "Errors detected - check $($ffmpeg_logs)/$($mkv.Name).log" -foregroundcolor red
+                Write-Host "Errors detected during FFmpeg conversion - check $($ffmpeg_logs)/$($mkv.Name).log" -foregroundcolor red
                 Add-Content -path $ffmpeg_errors -value $mkv.Name
                 Write-Host ""
             }
@@ -143,7 +143,7 @@ ForEach ($whole_mkv in $non_rar_mkv){
         $subtitle_codec = &mediainfo "--Inform=Text;%Format%\n" "$($whole_mkv)"
         # If file contains DTS, convert it
         If ($audio_codecs -match "DTS"){
-            Write-Host "Contains DTS - keeping DTS stream, adding AC3 stream " -foregroundcolor green -nonewline
+            Write-Host "AppleTV imcompatible streams. Contains DTS - keeping DTS stream, adding AC3 stream " -foregroundcolor green -nonewline
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
                 Write-Host "and has incompatible subtitle" -foregroundcolor green
@@ -156,21 +156,21 @@ ForEach ($whole_mkv in $non_rar_mkv){
             }
             # If no errors, write to log & delete MKV
             If ($lastexitcode -eq 0){
-                Write-Host "No errors detected" -foregroundcolor green
+                Write-Host "No errors detected during FFmpeg conversion" -foregroundcolor green
                 Add-Content -path $converted_history -value $whole_mkv.Name
                 Get-ChildItem -path $converted -recurse | Rename-Item -newname {$_.Name -replace ' ','.'}
                 Write-Host ""
             }
             # If errors, log filename for investigaion
             Else {
-                Write-Host "Errors detected - check $($ffmpeg_logs)/$($whole_mkv.Name)log" -foregroundcolor red
+                Write-Host "Errors detected during FFmpeg conversion - check $($ffmpeg_logs)/$($whole_mkv.Name)log" -foregroundcolor red
                 Add-Content -path $ffmpeg_errors -value $whole_mkv.Name
                 Write-Host ""
             }
         }
         # If file contains TrueHD or Dolby Digital Plus, convert it
         ElseIf ($audio_codecs -match "TrueHD" -or $audio_codecs -match "EAC3"){
-            Write-Host "Contains TrueHD or Dolby Digital Plus - coverting to AC3 " -foregroundcolor green -nonewline
+            Write-Host "AppleTV imcompatible streams. Contains TrueHD or Dolby Digital Plus - coverting to AC3 " -foregroundcolor green -nonewline
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
                 Write-Host "and has incompatible subtitle" -foregroundcolor green
@@ -183,14 +183,14 @@ ForEach ($whole_mkv in $non_rar_mkv){
             }
             # If no errors, write to log & delete MKV
             If ($lastexitcode -eq 0){
-                Write-Host "No errors detected" -foregroundcolor green
+                Write-Host "No errors detected during FFmpeg conversion" -foregroundcolor green
                 Add-Content -path $converted_history -value $whole_mkv.Name
                 Get-ChildItem -path $converted -recurse | Rename-Item -newname {$_.Name -replace ' ','.'}
                 Write-Host ""
             }
             # If errors, log filename for investigaion
             Else {
-                Write-Host "Errors detected - check $($ffmpeg_logs)/$($whole_mkv.Name).log" -foregroundcolor red
+                Write-Host "Errors detected during FFmpeg conversion - check $($ffmpeg_logs)/$($whole_mkv.Name).log" -foregroundcolor red
                 Add-Content -path $ffmpeg_errors -value $whole_mkv.Name
                 Write-Host ""
             }
@@ -199,24 +199,24 @@ ForEach ($whole_mkv in $non_rar_mkv){
         Else {
             # Ignore crappy subtitles
             If ($subtitle_codec -match "PGS"){
-                Write-Host "Apple compatible stream and has incompatible subtitle" -foregroundcolor green
+                Write-Host "AppleTV compatible stream and has incompatible subtitle" -foregroundcolor green
                 &ffmpeg -i $whole_mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a copy $converted/$mp4name.mp4 2> $ffmpeg_logs/$($whole_mkv.Name).log
             }
             # Include good subtitles
             Else {
-                Write-Host "Apple compatible stream and has good subtitle" -foregroundcolor green
+                Write-Host "AppleTV compatible stream and has good subtitle" -foregroundcolor green
                 &ffmpeg -i $whole_mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a copy -c:s mov_text $converted/$mp4name.mp4 2> $ffmpeg_logs/$($whole_mkv.Name).log
             }
             # If no errors, write to log & delete MKV
             If ($lastexitcode -eq 0){
-                Write-Host "No errors detected" -foregroundcolor green
+                Write-Host "No errors detected during FFmpeg conversion" -foregroundcolor green
                 Add-Content -path $converted_history -value $whole_mkv.Name
                 Get-ChildItem -path $converted -recurse | Rename-Item -newname {$_.Name -replace ' ','.'}
                 Write-Host ""
             }
             # If errors, log filename for investigaion
             Else {
-                Write-Host "Errors detected - check $($ffmpeg_logs)/$($whole_mkv.Name).log" -foregroundcolor red
+                Write-Host "Errors detected during FFmpeg conversion - check $($ffmpeg_logs)/$($whole_mkv.Name).log" -foregroundcolor red
                 Add-Content -path $ffmpeg_errors -value $whole_mkv.Name
                 Write-Host ""
             }
