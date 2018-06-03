@@ -82,7 +82,7 @@ ForEach ($mkv in $mkvfiles){
             }
             # Include good subtitles
             Else {
-                Write-Host "ans has good subtitle" -foregroundcolor green
+                Write-Host "and has good subtitle" -foregroundcolor green
                 &ffmpeg -i $mkv.FullName -map 0:0 -map 0:1 -c:v copy -c:a ac3 -b:a 640k -c:s mov_text $converted/$mp4name.mp4 2> $ffmpeg_logs/$($mkv.Name).log
             }
             # If no errors, write to log & delete MKV
@@ -225,7 +225,7 @@ ForEach ($whole_mkv in $non_rar_mkv){
 }
 
 # Transfer files if MacPro is available
-If (Test-Connection macpro.ragefire.local -BufferSize 16 -Count 1 -ea 0 -quiet > $null){
+If (Test-Connection macpro.ragefire.local -BufferSize 16 -Count 1 -ea 0 -quiet){
     # Transfer converted files
     $mp4files = Get-ChildItem -path $converted -recurse -include "*.mp4"
     ForEach ($mp4 in $mp4files){
