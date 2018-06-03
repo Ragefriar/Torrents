@@ -225,7 +225,7 @@ ForEach ($whole_mkv in $non_rar_mkv){
 }
 
 # Transfer files if MacPro is available
-If (Test-Connection macpro.ragefire.local -BufferSize 16 -Count 1 -ea 0 -quiet){
+If (Test-Connection macpro.ragefire.local -BufferSize 16 -Count 1 -ea 0 -quiet -informationaction ignore){
     # Transfer converted files
     $mp4files = Get-ChildItem -path $converted -recurse -include "*.mp4"
     ForEach ($mp4 in $mp4files){
