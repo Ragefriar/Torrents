@@ -92,7 +92,6 @@ ForEach ($program in $adult_tv){
             Rename-Item -path $tv.FullName -NewName $short_name
             $macpath = "$tv_adult" + "/" + "$program"
             Move-Item -path "$done/$short_name" -destination "$macpath"
-            # Remove-Item -path "$done/$short_name"
         }
     }
 }
@@ -106,7 +105,6 @@ ForEach ($program in $kids_tv){
             Rename-Item -path $tv.FullName -NewName $short_name
             $macpath = "$tv_kids" + "/" + "$program"
             Move-Item -path "$done/$short_name" -destination "$macpath"
-            # Remove-Item -path "$done/$short_name"
         }
     }
 }

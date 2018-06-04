@@ -1,44 +1,60 @@
 # Set global variables
-$done = "/mnt/nas3-archive/Downloads/done"
-$genres_nas1 = @(
+$done = "/Volumes/Data/Downloads/done"
+$genres_movies1 = @(
     "Kids"
     "RomCom"
     "Sci-Fi & Fantasy"
-    "Superhero"
     "War"
 )
-$genres_nas2 = @(
-    "Action & Adventure"
+$genres_movies2 = @(
     "Christmas"
     "Drama & Thriller"
     "Family & Comedy"
+)
+$genres_movies2 = @(
+    "Action & Adventure"
+    "Christmas"
     "Horror & Scary"
 )
+$movies1_holding = "/Volumes/Movies1/holding/"
+$movies2_holding = "/Volumes/Movies2/holding/"
+$movies3_holding = "/Volumes/Movies3/holding/"
 
-# Process movies stored on NAS1
-ForEach ($genre in $genres_nas1){
+# Process movies stored on Movies1
+ForEach ($genre in $genres_movies1){
     $files = Get-ChildItem -path $done
     ForEach ($movie in $files){
-        $movie_genre = &exiftool "$($movie.fullname)" | grep Genre | cut -d':' -f2
+        $movie_genre = &exiftool "$($movie.fullname)" | grep Genre | cut -d':' -f2 | head -n 1
         If ($movie_genre -match $genre){
             $folder_name = $genre -replace " & ","_"
-            &rsync -P -e ssh "$done/$($movie.name)" "admin@nas1.ragefire.local:/share/MD0_DATA/nas1-movies/.staging"
-            ssh admin@nas1.ragefire.local "mv /share/MD0_DATA/nas1-movies/.staging/*.m4v /share/MD0_DATA/nas1-movies/'$folder_name'"
-            Remove-Item -path "$done/$($movie.name)"
+            Move-Item -path "$done/$($movie.name)" -destination "$movies1_holding"
+            Move-Item -path "$movies1_holding/$($movie.name)" -destination "/Volumes/Movies1/'$folder_name'"
         }
     }
 }
 
-# Process movies stored on NAS2
-ForEach ($genre in $genres_nas2){
+# Process movies stored on Movies2
+ForEach ($genre in $genres_movies2){
     $files = Get-ChildItem -path $done
     ForEach ($movie in $files){
-        $movie_genre = &exiftool "$($movie.fullname)" | grep Genre | cut -d':' -f2
+        $movie_genre = &exiftool "$($movie.fullname)" | grep Genre | cut -d':' -f2 | head -n 1
         If ($movie_genre -match $genre){
             $folder_name = $genre -replace " & ","_"
-            &rsync -P -e ssh "$done/$($movie.name)" "admin@nas2.ragefire.local:/share/MD0_DATA/nas2-Movies/.staging"
-            ssh admin@nas2.ragefire.local "mv /share/MD0_DATA/nas2-Movies/.staging/*.m4v /share/MD0_DATA/nas2-Movies/'$folder_name'"
-            Remove-Item -path "$done/$($movie.name)"
+            Move-Item -path "$done/$($movie.name)" -destination "$movies2_holding"           
+            Move-Item -path "$movies2_holding/$($movie.name)" -destination "/Volumes/Movies2/'$folder_name'"
+        }
+    }
+}
+
+# Process movies stored on Movies3
+ForEach ($genre in $genres_nas3){
+    $files = Get-ChildItem -path $done
+    ForEach ($movie in $files){
+        $movie_genre = &exiftool "$($movie.fullname)" | grep Genre | cut -d':' -f2 | head -n 1
+        If ($movie_genre -match $genre){
+            $folder_name = $genre -replace " & ","_"
+            Move-Item -path "$done/$($movie.name)" -destination "$movies2_holding"
+            Move-Item -path "$movies3_holding/$($movie.name)" -destination "/Volumes/Movies3/'$folder_name'"
         }
     }
 }
