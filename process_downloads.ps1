@@ -281,8 +281,10 @@ Else {
 
 # Move files on MacPro info folders for tagging
 Write-Host ""
-Write-Host "Transfers complete.  Moving files about on MacPro" -foregroundcolor green
+Write-Host "Transfers complete.  Moving files about on MacPro for tagging" -foregroundcolor green
 ssh chris@macpro.ragefire.local "mv /Volumes/Data/Downloads/untagged/*.mp4 /Volumes/Data/Downloads/untagged/mp4" > /dev/null 2>&1
 ssh chris@macpro.ragefire.local "mv /Volumes/Data/Downloads/untagged/*.m4v /Volumes/Data/Downloads/untagged/m4v" > /dev/null 2>&1
+Write-Host "Kicking off remote script to move fies and ass to iTunes"
+ssh chris@macpro.ragefire.local "nohup /Volumes/Data/Downloads/scripts/start_processing.sh"
 Write-Host "All Done!!" -foregroundcolor blue
 Stop-Transcript
