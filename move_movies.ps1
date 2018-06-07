@@ -13,8 +13,8 @@ $genres_movies2 = @(
 )
 $genres_movies2 = @(
     "Action & Adventure"
-    "Christmas"
     "Horror & Scary"
+    "Superhero"
 )
 $movies1_holding = "/Volumes/Movies1/holding/"
 $movies2_holding = "/Volumes/Movies2/holding/"
